@@ -1,5 +1,3 @@
-using System;
-
 namespace TermProject.Models
 {
     public class ErrorViewModel
