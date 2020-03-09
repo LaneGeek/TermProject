@@ -12,6 +12,7 @@ namespace TermProject.Controllers
         // Dependency injection
         public SuccessSecretController(IRepository repository) => _repository = repository;
 
+        [AllowAnonymous]
         public IActionResult Index() => View(_repository.SuccessSecrets);
 
         public IActionResult Add() => View();
