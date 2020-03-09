@@ -1,5 +1,26 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IEnumerable<SuccessSecret>
+
+<h1>Secrets Of Success</h1>
+
+<table class="table">
+    <thead>
+    <tr class="table-success">
+        <th>Success Achieved</th>
+        <th>The Secret</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    @{
+        foreach (var successSecret in Model)
+        {
+            <tr class="table-primary">
+                <td>@successSecret.Success</td>
+                <td>@successSecret.Secret</td>
+            </tr>
+        }
+    }
+
+    </tbody>
+</table>

@@ -11,7 +11,7 @@ namespace TermProject.Models
         [StringLength(20, MinimumLength = 2, ErrorMessage = "Must be between 2 and 20 characters long!")]
         public string Item { get; set; }
 
-        [Required(ErrorMessage = "Please enter the text.")]
+        [Required(ErrorMessage = "Please enter the description.")]
         [StringLength(40, MinimumLength = 2, ErrorMessage = "Must be between 2 and 40 characters long!")]
         public string Text { get; set; }
     }

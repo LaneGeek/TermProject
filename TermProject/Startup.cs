@@ -24,6 +24,9 @@ namespace TermProject
         {
             services.AddControllersWithViews();
 
+            // Dependency injection
+            services.AddTransient<IRepository, Repository>();
+
             // EF database
             services.AddDbContext<AppDbContext>(x => x.UseSqlServer(Configuration["ConnectionString"]));
 
@@ -65,6 +68,9 @@ namespace TermProject
             {
                 endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            Seed.CreateAdminAccount(app.ApplicationServices, Configuration).Wait();
+            Console.WriteLine("Web App is running! May the force be with you...");
         }
     }
 }

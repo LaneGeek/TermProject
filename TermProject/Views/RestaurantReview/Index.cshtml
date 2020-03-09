@@ -1,5 +1,32 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IEnumerable<RestaurantReview>
+
+<h1>Restaurant Reviews</h1>
+
+<table class="table">
+    <thead>
+    <tr class="table-success">
+        <th>Name</th>
+        <th>City</th>
+        <th>Country</th>
+        <th>Rating</th>
+        <th>Comment</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    @{
+        foreach (var restaurantReview in Model)
+        {
+            <tr class="table-primary">
+                <td>@restaurantReview.Name</td>
+                <td>@restaurantReview.City</td>
+                <td>@restaurantReview.Country</td>
+                <td>@restaurantReview.Rating</td>
+                <td>@restaurantReview.Comment</td>
+            </tr>
+        }
+    }
+
+    </tbody>
+</table>

@@ -1,5 +1,20 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model Classified
+
+<h1>Submit Classified Ad</h1>
+
+<p>
+    Please fill out the information below and don't forget to put in your contact information and your asking price!
+</p>
+
+<form asp-action="Add" method="post">
+    <div class="lead text-warning" asp-validation-summary="All"></div>
+    <div class="form-group">
+        <label class="col-form-label" asp-for="Item">Item</label>
+        <input class="form-control" asp-for="Item">
+    </div>
+    <div class="form-group">
+        <label class="col-form-label" asp-for="Text">Description</label>
+        <input class="form-control" asp-for="Text">
+    </div>
+    <input type="submit" class="btn btn-primary btn-lg" value="Submit" />
+</form>
