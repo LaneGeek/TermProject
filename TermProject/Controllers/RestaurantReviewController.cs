@@ -1,9 +1,11 @@
 ﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TermProject.Models;
 
 namespace TermProject.Controllers
 {
+    [Authorize]
     public class RestaurantReviewController : Controller
     {
         private readonly IRepository _repository;
@@ -11,6 +13,7 @@ namespace TermProject.Controllers
         // Dependency injection
         public RestaurantReviewController(IRepository repository) => _repository = repository;
 
+        [AllowAnonymous]
         public IActionResult Index() => View(_repository.RestaurantReviews);
 
         public IActionResult Search() => View();

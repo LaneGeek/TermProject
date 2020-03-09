@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TermProject.Models;
 
 namespace TermProject.Controllers
 {
+    [Authorize]
     public class ClassifiedController : Controller
     {
         private readonly IRepository _repository;
@@ -10,6 +12,7 @@ namespace TermProject.Controllers
         // Dependency injection
         public ClassifiedController(IRepository repository) => _repository = repository;
 
+        [AllowAnonymous]
         public IActionResult Index() => View(_repository.Classifieds);
 
         public IActionResult Add() => View();

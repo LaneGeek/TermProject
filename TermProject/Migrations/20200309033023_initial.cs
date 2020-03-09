@@ -56,7 +56,7 @@ namespace TermProject.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Item = table.Column<string>(maxLength: 20, nullable: false),
-                    Text = table.Column<string>(maxLength: 40, nullable: false)
+                    Text = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {

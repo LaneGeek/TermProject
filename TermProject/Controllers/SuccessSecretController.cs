@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TermProject.Models;
 
 namespace TermProject.Controllers
 {
+    [Authorize]
     public class SuccessSecretController : Controller
     {
         private readonly IRepository _repository;

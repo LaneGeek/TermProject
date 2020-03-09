@@ -10,7 +10,7 @@ using TermProject.Models;
 namespace TermProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200308234531_initial")]
+    [Migration("20200309033023_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -237,8 +237,7 @@ namespace TermProject.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasColumnType("nvarchar(40)")
-                        .HasMaxLength(40);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
