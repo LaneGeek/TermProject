@@ -1,0 +1,21 @@
+﻿@model AppUser
+
+<h1>Edit User</h1>
+
+<p>
+    Edit the user @Model.FirstName @Model.LastName with the Id @Model.Id below. You can only change the Email and Password.
+</p>
+
+<form asp-action="Edit" method="post">
+    <div class="lead text-warning" asp-validation-summary="All"></div>
+    <div class="form-group">
+        <label class="col-form-label" asp-for="Email">Email</label>
+        <input class="form-control" asp-for="Email">
+    </div>
+    <div class="form-group">
+        <label class="col-form-label" for="password">Password</label>
+        <input class="form-control" name="password">
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg">Save</button>
+    <a asp-action="Index" class="btn btn-secondary btn-lg">Cancel</a>
+</form>
