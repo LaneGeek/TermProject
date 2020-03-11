@@ -1,11 +1,28 @@
-﻿<h1 class="display-5">Kamran's Website</h1>
+﻿@model AppUser
+
+<h1 class="display-5">
+    @{
+        if (Model != null)
+        {
+            <strong>@Model.FirstName @Model.LastName,</strong>
+            <br/>
+        }
+    }
+
+    Welcome To<br />
+    Kamran's Website
+</h1>
 
 <p>
     Welcome to <em>the</em> place for restaurant reviews, classifieds and secrets of success!
 </p>
 
 <p>
-    To navigate in this website is easy. All you need to do is use the navigation menu at the very top of each page. From there you can choose to view any page you like.
+    To navigate in this website is easy. All you need to do is use the navigation menu at the 
+    very top of each page. From there you can choose to view any page you like. Note that 
+    while you can view anything, to post your own restaurant reviews, classified ads or secrets
+    you <strong>must be a registered user</strong>. Also, do not try to go to any of the admin 
+    pages!
 </p>
 
 <p>
