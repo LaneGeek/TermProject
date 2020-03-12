@@ -6,7 +6,6 @@ namespace TermProject.Models
     {
         public int Id { get; set; }
 
-        // The properties below need input validation
         [Required(ErrorMessage = "Please enter the restaurant's name please.")]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "Must be between 2 and 20 characters long!")]
         public string Name { get; set; }

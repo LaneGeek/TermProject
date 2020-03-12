@@ -13,6 +13,7 @@ namespace TermProject.Models
             UserManager<AppUser> userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
             RoleManager<IdentityRole> roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
+            // Rather than directly enter the data here, instead the data is in 'appsettings.json'
             string firstName = configuration["AdminUser:FirstName"];
             string lastName = configuration["AdminUser:LastName"];
             string email = configuration["AdminUser:Email"];
@@ -38,11 +39,14 @@ namespace TermProject.Models
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, role);
+                    
+                    // This message is displayed and is useful for diagnosis
                     Console.WriteLine("No admin user present. New admin user created.");
                 }
             }
             else
             {
+                // As is this message
                 Console.WriteLine("Admin user already present. New one not created.");
             }
         }

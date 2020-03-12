@@ -4,17 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using TermProject.Models;
 using Microsoft.AspNetCore.Identity;
 
+// This code is based on the book with minor changes
 namespace TermProject.Controllers
 {
     public class AccountController : Controller
     {
-        private UserManager<AppUser> userManager;
-        private SignInManager<AppUser> signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(UserManager<AppUser> userMgr, SignInManager<AppUser> signinMgr)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
-            userManager = userMgr;
-            signInManager = signinMgr;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public IActionResult Login(string returnUrl)
@@ -29,12 +30,12 @@ namespace TermProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = await userManager.FindByEmailAsync(details.Email);
+                AppUser user = await _userManager.FindByEmailAsync(details.Email);
                 if (user != null)
                 {
-                    await signInManager.SignOutAsync();
+                    await _signInManager.SignOutAsync();
                     Microsoft.AspNetCore.Identity.SignInResult result =
-                        await signInManager.PasswordSignInAsync(user, details.Password, false, false);
+                        await _signInManager.PasswordSignInAsync(user, details.Password, false, false);
                     if (result.Succeeded)
                     {
                         return Redirect(returnUrl ?? "/");
@@ -51,14 +52,11 @@ namespace TermProject.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            await signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
+        public IActionResult AccessDenied() => View();
 
         public ViewResult Register() => View();
 
@@ -74,7 +72,7 @@ namespace TermProject.Controllers
                     UserName = createUserViewModel.Email,
                     Email = createUserViewModel.Email
                 };
-                IdentityResult result = await userManager.CreateAsync(user, createUserViewModel.Password);
+                IdentityResult result = await _userManager.CreateAsync(user, createUserViewModel.Password);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Login");

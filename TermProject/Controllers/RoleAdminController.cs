@@ -6,22 +6,23 @@ using TermProject.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 
+// This code is based on the book with minor changes
 namespace TermProject.Controllers
 {
     [Authorize(Roles = "Admins")]
     public class RoleAdminController : Controller
     {
-        private RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        private UserManager<AppUser> userManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public RoleAdminController(RoleManager<IdentityRole> roleMgr, UserManager<AppUser> userMrg)
+        public RoleAdminController(RoleManager<IdentityRole> roleManager, UserManager<AppUser> userManager)
         {
-            roleManager = roleMgr;
-            userManager = userMrg;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
-        public ViewResult Index() => View(roleManager.Roles);
+        public ViewResult Index() => View(_roleManager.Roles);
 
         public IActionResult Create() => View();
 
@@ -30,7 +31,7 @@ namespace TermProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityResult result = await roleManager.CreateAsync(new IdentityRole(name));
+                IdentityResult result = await _roleManager.CreateAsync(new IdentityRole(name));
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
@@ -46,10 +47,10 @@ namespace TermProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            IdentityRole role = await roleManager.FindByIdAsync(id);
+            IdentityRole role = await _roleManager.FindByIdAsync(id);
             if (role != null)
             {
-                IdentityResult result = await roleManager.DeleteAsync(role);
+                IdentityResult result = await _roleManager.DeleteAsync(role);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
@@ -63,17 +64,17 @@ namespace TermProject.Controllers
             {
                 ModelState.AddModelError("", "No role found");
             }
-            return View("Index", roleManager.Roles);
+            return View("Index", _roleManager.Roles);
         }
 
         public async Task<IActionResult> Edit(string id)
         {
-            IdentityRole role = await roleManager.FindByIdAsync(id);
+            IdentityRole role = await _roleManager.FindByIdAsync(id);
             List<AppUser> members = new List<AppUser>();
             List<AppUser> nonMembers = new List<AppUser>();
-            foreach (AppUser user in userManager.Users)
+            foreach (AppUser user in _userManager.Users)
             {
-                var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
+                var list = await _userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
                 list.Add(user);
             }
             return View(new RoleEditModel
@@ -92,10 +93,10 @@ namespace TermProject.Controllers
             {
                 foreach (string userId in model.IdsToAdd ?? new string[] { })
                 {
-                    AppUser user = await userManager.FindByIdAsync(userId);
+                    AppUser user = await _userManager.FindByIdAsync(userId);
                     if (user != null)
                     {
-                        result = await userManager.AddToRoleAsync(user, model.RoleName);
+                        result = await _userManager.AddToRoleAsync(user, model.RoleName);
                         if (!result.Succeeded)
                         {
                             AddErrorsFromResult(result);
@@ -105,10 +106,10 @@ namespace TermProject.Controllers
 
                 foreach (string userId in model.IdsToDelete ?? new string[] { })
                 {
-                    AppUser user = await userManager.FindByIdAsync(userId);
+                    AppUser user = await _userManager.FindByIdAsync(userId);
                     if (user != null)
                     {
-                        result = await userManager.RemoveFromRoleAsync(user, model.RoleName);
+                        result = await _userManager.RemoveFromRoleAsync(user, model.RoleName);
                         if (!result.Succeeded)
                         {
                             AddErrorsFromResult(result);

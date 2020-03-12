@@ -1,11 +1,22 @@
-﻿@model AppUser
+﻿@model Tuple<AppUser, bool>
 
 <h1 class="display-5">
     @{
-        if (Model != null)
+        var user = @Model.Item1;
+        var userIsAdmin = @Model.Item2;
+
+
+        if (user != null)
         {
-            <strong>@Model.FirstName @Model.LastName,</strong>
+            <strong>@user.FirstName @user.LastName,</strong>
             <br/>
+
+            if (userIsAdmin)
+            {
+                <p>
+                    <strong>You are an admin.</strong> You can access the admin pages.
+                </p>
+            }
         }
     }
 

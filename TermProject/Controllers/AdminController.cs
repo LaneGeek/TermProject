@@ -4,25 +4,26 @@ using Microsoft.AspNetCore.Mvc;
 using TermProject.Models;
 using Microsoft.AspNetCore.Authorization;
 
+// This code is based on the book with minor changes
 namespace TermProject.Controllers
 {
     [Authorize(Roles = "Admins")]
     public class AdminController : Controller
     {
-        private UserManager<AppUser> userManager;
-        private IUserValidator<AppUser> userValidator;
-        private IPasswordValidator<AppUser> passwordValidator;
-        private IPasswordHasher<AppUser> passwordHasher;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IUserValidator<AppUser> _userValidator;
+        private readonly IPasswordValidator<AppUser> _passwordValidator;
+        private readonly IPasswordHasher<AppUser> _passwordHasher;
 
-        public AdminController(UserManager<AppUser> usrMgr, IUserValidator<AppUser> userValid, IPasswordValidator<AppUser> passValid, IPasswordHasher<AppUser> passwordHash)
+        public AdminController(UserManager<AppUser> userManager, IUserValidator<AppUser> userValidator, IPasswordValidator<AppUser> passwordValidator, IPasswordHasher<AppUser> passwordHasher)
         {
-            userManager = usrMgr;
-            userValidator = userValid;
-            passwordValidator = passValid;
-            passwordHasher = passwordHash;
+            _userManager = userManager;
+            _userValidator = userValidator;
+            _passwordValidator = passwordValidator;
+            _passwordHasher = passwordHasher;
         }
 
-        public ViewResult Index() => View(userManager.Users);
+        public ViewResult Index() => View(_userManager.Users);
 
         public ViewResult Create() => View();
 
@@ -38,7 +39,7 @@ namespace TermProject.Controllers
                     UserName = createUserViewModel.Email,
                     Email = createUserViewModel.Email
                 };
-                IdentityResult result = await userManager.CreateAsync(user, createUserViewModel.Password);
+                IdentityResult result = await _userManager.CreateAsync(user, createUserViewModel.Password);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
@@ -57,10 +58,10 @@ namespace TermProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            AppUser user = await userManager.FindByIdAsync(id);
+            AppUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
-                IdentityResult result = await userManager.DeleteAsync(user);
+                IdentityResult result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
@@ -74,12 +75,12 @@ namespace TermProject.Controllers
             {
                 ModelState.AddModelError("", "User Not Found");
             }
-            return View("Index", userManager.Users);
+            return View("Index", _userManager.Users);
         }
 
         public async Task<IActionResult> Edit(string id)
         {
-            AppUser user = await userManager.FindByIdAsync(id);
+            AppUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
                 return View(user);
@@ -93,11 +94,11 @@ namespace TermProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(string id, string email, string password)
         {
-            AppUser user = await userManager.FindByIdAsync(id);
+            AppUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
                 user.Email = email;
-                IdentityResult validEmail = await userValidator.ValidateAsync(userManager, user);
+                IdentityResult validEmail = await _userValidator.ValidateAsync(_userManager, user);
                 if (!validEmail.Succeeded)
                 {
                     AddErrorsFromResult(validEmail);
@@ -105,10 +106,10 @@ namespace TermProject.Controllers
                 IdentityResult validPass = null;
                 if (!string.IsNullOrEmpty(password))
                 {
-                    validPass = await passwordValidator.ValidateAsync(userManager, user, password);
+                    validPass = await _passwordValidator.ValidateAsync(_userManager, user, password);
                     if (validPass.Succeeded)
                     {
-                        user.PasswordHash = passwordHasher.HashPassword(user, password);
+                        user.PasswordHash = _passwordHasher.HashPassword(user, password);
                     }
                     else
                     {
@@ -117,7 +118,7 @@ namespace TermProject.Controllers
                 }
                 if ((validEmail.Succeeded && validPass == null) || (validEmail.Succeeded && password != string.Empty && validPass.Succeeded))
                 {
-                    IdentityResult result = await userManager.UpdateAsync(user);
+                    IdentityResult result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Index");
